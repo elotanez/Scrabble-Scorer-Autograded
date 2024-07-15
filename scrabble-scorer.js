@@ -37,35 +37,79 @@ function oldScrabbleScorer(word) {
 function initialPrompt() {
    console.log("Let's play some scrabble!")
    let word = input.question("Enter a word to score: ")
-   return console.log(vowelBonusScorer(word))
+   return console.log(oldScrabbleScorer(word))
 };
-
-function simpleScorer (word) {
-word = word.toUpperCase();
-let points = 0;
-for (let i = 0; i < word.length; i++) {
-   points += 1
-}
-return points
-}
-
 
 let newPointStructure;
 
-//let simpleScorer;
+let simpleScorer = function (word) {
+   word = word.toUpperCase();
+   let points = 0;
+   for (let i = 0; i < word.length; i++) {
+      points += 1
+   }
+   return points
+   };
 
-let vowelBonusScorer;
+let vowelBonusScorer = function (word) {
+   word = word.toUpperCase()
+   let points = 0;
+   for ( let i = 0; i < word.length; i++) {
+      if (word[i] === "A" || word[i] === "E" || word[i] === "I" || word[i] === "O" || word[i] === "U") {
+         points += 3
+      } else {
+         points += 1
+      }
+   }
+   return points
+}
 
 let scrabbleScorer;
 
-const scoringAlgorithms = [];
+const scoringAlgorithms = [
+    {
+      name: "Simple Score",
+      description: "Each letter is worth 1 point.",
+      scoreFunction: simpleScorer 
+   },
+   {
+      name: "Bonus Vowels",
+      description: "Vowels are 3 pts, consonants are 1 pt.",
+      scoreFunction: vowelBonusScorer
+   },
+   {
+      name: "Scrabble",
+      description: "The traditional scoring algorithm.",
+      scoreFunction: oldScrabbleScorer
+   }
 
-function scorerPrompt() {}
+];
+
+function scorerPrompt(word) {
+   console.log("Let's play some Scrabble!");
+   word = input.question("Enter a word to score: ");
+   console.log("Which scoring algorithm would you like to use?");
+   console.log("0 - Simple: One point per character");
+   console.log("1 - Vowel Bonus: Vowels are worth 3 points");
+   console.log("2 - Scrabble: Uses scrabble point system;");
+   let numPrompt = input.question("Enter 0, 1, 2: ");
+   let points = 0
+   for (i = 0; i < scoringAlgorithms.length; i++){
+      if ( numPrompt === '0') {
+         points = simpleScorer(word)
+      } else if (numPrompt === '1') {
+         points = vowelBonusScorer(word)
+      } else if (numPrompt === '2') {
+         points = oldScrabbleScorer(word)
+      }
+   }
+   return console.log(`Score for '${word}': ${points}`)
+};
 
 function transform() {};
 
 function runProgram() {
-   initialPrompt();
+   scorerPrompt();
    
 }
 
